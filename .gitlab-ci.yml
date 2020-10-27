@@ -1,0 +1,23 @@
+image: node:12.14.0 # can be upgraded, depending on your node version used
+
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - yarn
+
+pages:
+  stage: deploy
+  script:
+    - CI=false npm run build
+    - rm -rf public
+    - mv build public
+  artifacts:
+    paths:
+      - public # GitLab pages serve from a 'public' directory
+  only:
+    - master # run on master branch
+  tags:
+    - runner-shared-docker
